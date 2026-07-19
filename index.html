@@ -94,7 +94,7 @@
     #sequence-section {
       position: relative;
       /* height = n_frames × viewport, controls scroll distance */
-      height: 900vh;
+      height: 1200vh;
     }
 
     #sequence-sticky {
@@ -799,9 +799,9 @@
 
       <!-- Frame counter -->
       <div class="frame-counter">
-        <span class="current" id="frame-current">01</span>
+        <span class="current" id="frame-current">001</span>
         <span style="color:var(--ash)"> / </span>
-        <span id="frame-total">09</span>
+        <span id="frame-total">118</span>
       </div>
 
     </div>
@@ -1067,15 +1067,124 @@
     // Pattern: images/watch_001.jpg through images/watch_009.jpg
     // OR use the demo fallback (gradient canvas) if images aren't ready
     const IMAGE_PATHS = [
-      'images/Jul_20__2026__01_10_40_AM.png',
-      'images/Jul_20__2026__01_10_38_AM.png',
-      'images/flux-dev_Luxury_Swiss_watch_floating_in_pure_darkness_single_dramatic_overhead_spotlight_-3.jpg',
-      'images/ChatGPT_Image_Jul_20__2026__01_07_44_AM.png',
-      'images/flux-dev_Ultra-close_macro_of_a_gold_deployant_clasp_on_a_black_crocodile_strap_dramatic_-0.jpg',
-      'images/ChatGPT_Image_Jul_20__2026__01_08_42_AM.png',
-      'images/ChatGPT_Image_Jul_20__2026__01_00_35_AM.png',
-      'images/flux-dev_Luxury_Swiss_watch_floating_in_pure_darkness_single_dramatic_overhead_spotlight_-0.jpg',
-      'images/flux-dev_Luxury_Swiss_watch_floating_in_pure_darkness_single_dramatic_overhead_spotlight_-1.jpg',
+      'images/frames/0001.jpg',
+      'images/frames/0002.jpg',
+      'images/frames/0003.jpg',
+      'images/frames/0004.jpg',
+      'images/frames/0005.jpg',
+      'images/frames/0006.jpg',
+      'images/frames/0007.jpg',
+      'images/frames/0008.jpg',
+      'images/frames/0009.jpg',
+      'images/frames/0010.jpg',
+      'images/frames/0011.jpg',
+      'images/frames/0012.jpg',
+      'images/frames/0013.jpg',
+      'images/frames/0014.jpg',
+      'images/frames/0015.jpg',
+      'images/frames/0016.jpg',
+      'images/frames/0017.jpg',
+      'images/frames/0018.jpg',
+      'images/frames/0019.jpg',
+      'images/frames/0020.jpg',
+      'images/frames/0021.jpg',
+      'images/frames/0022.jpg',
+      'images/frames/0023.jpg',
+      'images/frames/0024.jpg',
+      'images/frames/0025.jpg',
+      'images/frames/0026.jpg',
+      'images/frames/0027.jpg',
+      'images/frames/0028.jpg',
+      'images/frames/0029.jpg',
+      'images/frames/0030.jpg',
+      'images/frames/0031.jpg',
+      'images/frames/0032.jpg',
+      'images/frames/0033.jpg',
+      'images/frames/0034.jpg',
+      'images/frames/0035.jpg',
+      'images/frames/0036.jpg',
+      'images/frames/0037.jpg',
+      'images/frames/0038.jpg',
+      'images/frames/0039.jpg',
+      'images/frames/0040.jpg',
+      'images/frames/0041.jpg',
+      'images/frames/0042.jpg',
+      'images/frames/0043.jpg',
+      'images/frames/0044.jpg',
+      'images/frames/0045.jpg',
+      'images/frames/0046.jpg',
+      'images/frames/0047.jpg',
+      'images/frames/0048.jpg',
+      'images/frames/0049.jpg',
+      'images/frames/0050.jpg',
+      'images/frames/0051.jpg',
+      'images/frames/0052.jpg',
+      'images/frames/0053.jpg',
+      'images/frames/0054.jpg',
+      'images/frames/0055.jpg',
+      'images/frames/0056.jpg',
+      'images/frames/0057.jpg',
+      'images/frames/0058.jpg',
+      'images/frames/0059.jpg',
+      'images/frames/0060.jpg',
+      'images/frames/0061.jpg',
+      'images/frames/0062.jpg',
+      'images/frames/0063.jpg',
+      'images/frames/0064.jpg',
+      'images/frames/0065.jpg',
+      'images/frames/0066.jpg',
+      'images/frames/0067.jpg',
+      'images/frames/0068.jpg',
+      'images/frames/0069.jpg',
+      'images/frames/0070.jpg',
+      'images/frames/0071.jpg',
+      'images/frames/0072.jpg',
+      'images/frames/0073.jpg',
+      'images/frames/0074.jpg',
+      'images/frames/0075.jpg',
+      'images/frames/0076.jpg',
+      'images/frames/0077.jpg',
+      'images/frames/0078.jpg',
+      'images/frames/0079.jpg',
+      'images/frames/0080.jpg',
+      'images/frames/0081.jpg',
+      'images/frames/0082.jpg',
+      'images/frames/0083.jpg',
+      'images/frames/0084.jpg',
+      'images/frames/0085.jpg',
+      'images/frames/0086.jpg',
+      'images/frames/0087.jpg',
+      'images/frames/0088.jpg',
+      'images/frames/0089.jpg',
+      'images/frames/0090.jpg',
+      'images/frames/0091.jpg',
+      'images/frames/0092.jpg',
+      'images/frames/0093.jpg',
+      'images/frames/0094.jpg',
+      'images/frames/0095.jpg',
+      'images/frames/0096.jpg',
+      'images/frames/0097.jpg',
+      'images/frames/0098.jpg',
+      'images/frames/0099.jpg',
+      'images/frames/0100.jpg',
+      'images/frames/0101.jpg',
+      'images/frames/0102.jpg',
+      'images/frames/0103.jpg',
+      'images/frames/0104.jpg',
+      'images/frames/0105.jpg',
+      'images/frames/0106.jpg',
+      'images/frames/0107.jpg',
+      'images/frames/0108.jpg',
+      'images/frames/0109.jpg',
+      'images/frames/0110.jpg',
+      'images/frames/0111.jpg',
+      'images/frames/0112.jpg',
+      'images/frames/0113.jpg',
+      'images/frames/0114.jpg',
+      'images/frames/0115.jpg',
+      'images/frames/0116.jpg',
+      'images/frames/0117.jpg',
+      'images/frames/0118.jpg'
     ];
     const TOTAL_FRAMES = IMAGE_PATHS.length;
 
@@ -1091,7 +1200,7 @@
     const frameTotal   = document.getElementById('frame-total');
     const nav          = document.getElementById('main-nav');
 
-    frameTotal.textContent = String(TOTAL_FRAMES).padStart(2, '0');
+    frameTotal.textContent = String(TOTAL_FRAMES).padStart(3, '0');
 
     /* ── CANVAS SIZING ───────────────────────────────────────── */
     function resizeCanvas() {
