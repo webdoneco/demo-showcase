@@ -1,1237 +1,1340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MAISON — Luxury Fashion House</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --black: #080808;
-    --off-white: #F0EDE8;
-    --gold: #B8964E;
-    --gold-light: #D4AF6A;
-    --gray: #888880;
-    --dark-gray: #1A1A18;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--black);
-    color: var(--off-white);
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 200;
-    overflow-x: hidden;
-  }
-
-  /* ── HEADER ── */
-  header {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2rem 4rem;
-    mix-blend-mode: normal;
-    transition: background 0.5s;
-  }
-
-  header.scrolled {
-    background: rgba(8,8,8,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(184,150,78,0.15);
-  }
-
-  .logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.6rem;
-    font-weight: 300;
-    letter-spacing: 0.4em;
-    color: var(--off-white);
-    text-decoration: none;
-  }
-
-  nav { display: flex; gap: 3rem; align-items: center; }
-
-  nav a {
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--off-white);
-    text-decoration: none;
-    opacity: 0.7;
-    transition: opacity 0.3s;
-  }
-
-  nav a:hover { opacity: 1; color: var(--gold-light); }
-
-  .nav-cta {
-    border: 1px solid var(--gold);
-    padding: 0.6rem 1.8rem;
-    color: var(--gold) !important;
-    opacity: 1 !important;
-    transition: all 0.3s !important;
-  }
-
-  .nav-cta:hover {
-    background: var(--gold);
-    color: var(--black) !important;
-  }
-
-  /* ── SCROLL SEQUENCE ── */
-  #scroll-sequence {
-    position: relative;
-    height: 600vh;
-  }
-
-  .sequence-sticky {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #sequence-canvas {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-  }
-
-  .sequence-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(8,8,8,0.3) 0%,
-      rgba(8,8,8,0.1) 40%,
-      rgba(8,8,8,0.5) 100%
-    );
-    z-index: 2;
-  }
-
-  .sequence-content {
-    position: relative;
-    z-index: 3;
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .eyebrow {
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 1s ease;
-  }
-
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(4rem, 10vw, 9rem);
-    font-weight: 300;
-    line-height: 0.9;
-    letter-spacing: -0.02em;
-    margin-bottom: 2rem;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 1.2s ease 0.2s;
-  }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--gold-light);
-  }
-
-  .hero-sub {
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gray);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 1s ease 0.4s;
-  }
-
-  .sequence-content.visible .eyebrow,
-  .sequence-content.visible .hero-title,
-  .sequence-content.visible .hero-sub {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Scroll hint */
-  .scroll-hint {
-    position: absolute;
-    bottom: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.8rem;
-    opacity: 1;
-    transition: opacity 0.5s;
-  }
-
-  .scroll-hint span {
-    font-size: 0.55rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gray);
-  }
-
-  .scroll-line {
-    width: 1px;
-    height: 50px;
-    background: linear-gradient(to bottom, var(--gold), transparent);
-    animation: scrollPulse 2s ease-in-out infinite;
-  }
-
-  @keyframes scrollPulse {
-    0%, 100% { opacity: 0.3; transform: scaleY(1); }
-    50% { opacity: 1; transform: scaleY(1.1); }
-  }
-
-  /* Scene labels */
-  .scene-label {
-    position: absolute;
-    bottom: 6rem;
-    right: 4rem;
-    z-index: 10;
-    text-align: right;
-    opacity: 0;
-    transition: opacity 0.8s;
-  }
-
-  .scene-label.visible { opacity: 1; }
-
-  .scene-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 5rem;
-    font-weight: 300;
-    color: rgba(184,150,78,0.15);
-    line-height: 1;
-  }
-
-  .scene-text {
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-
-  /* Progress bar */
-  .sequence-progress {
-    position: absolute;
-    left: 4rem;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
-  .progress-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    transition: all 0.5s;
-    cursor: pointer;
-  }
-
-  .progress-dot.active {
-    background: var(--gold);
-    transform: scale(1.5);
-  }
-
-  /* ── COLLECTION SECTION ── */
-  #collection {
-    padding: 8rem 4rem;
-    background: var(--black);
-  }
-
-  .section-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 5rem;
-    border-bottom: 1px solid rgba(184,150,78,0.2);
-    padding-bottom: 2rem;
-  }
-
-  .section-eyebrow {
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    font-weight: 300;
-    line-height: 1;
-  }
-
-  .section-title em { font-style: italic; }
-
-  .section-link {
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    transition: gap 0.3s;
-  }
-
-  .section-link:hover { gap: 1.5rem; }
-  .section-link::after { content: '→'; }
-
-  .collection-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 1.5rem;
-  }
-
-  .collection-item {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-  }
-
-  .collection-item:first-child {
-    grid-row: 1 / 3;
-  }
-
-  .item-image {
-    width: 100%;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
-    background: var(--dark-gray);
-  }
-
-  .collection-item:first-child .item-image {
-    aspect-ratio: unset;
-    height: 100%;
-    min-height: 600px;
-  }
-
-  .collection-item:hover .item-image { transform: scale(1.04); }
-
-  .item-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(8,8,8,0.8) 0%, transparent 50%);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 2rem;
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-
-  .collection-item:hover .item-overlay { opacity: 1; }
-
-  .item-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 300;
-    margin-bottom: 0.5rem;
-  }
-
-  .item-price {
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-  }
-
-  /* Image placeholders with CSS gradients */
-  .img-placeholder {
-    width: 100%;
-    height: 100%;
-    min-height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
-    color: rgba(184,150,78,0.3);
-    text-transform: uppercase;
-  }
-
-  .img-1 { background: linear-gradient(135deg, #1a1510 0%, #2d2418 50%, #1a1510 100%); }
-  .img-2 { background: linear-gradient(135deg, #0f1520 0%, #1a2535 50%, #0f1520 100%); }
-  .img-3 { background: linear-gradient(135deg, #150f10 0%, #251820 50%, #150f10 100%); }
-  .img-4 { background: linear-gradient(135deg, #101510 0%, #1a2518 50%, #101510 100%); }
-
-  /* ── MARQUEE ── */
-  .marquee-section {
-    padding: 3rem 0;
-    border-top: 1px solid rgba(184,150,78,0.15);
-    border-bottom: 1px solid rgba(184,150,78,0.15);
-    overflow: hidden;
-    background: var(--dark-gray);
-  }
-
-  .marquee-track {
-    display: flex;
-    gap: 4rem;
-    animation: marquee 20s linear infinite;
-    white-space: nowrap;
-  }
-
-  .marquee-item {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    font-style: italic;
-    color: var(--gold);
-    opacity: 0.6;
-    flex-shrink: 0;
-  }
-
-  .marquee-dot {
-    color: var(--gold);
-    opacity: 0.3;
-    flex-shrink: 0;
-    align-self: center;
-  }
-
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  /* ── PHILOSOPHY ── */
-  #philosophy {
-    padding: 10rem 4rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8rem;
-    align-items: center;
-  }
-
-  .philosophy-text .label {
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 2rem;
-  }
-
-  .philosophy-quote {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2rem, 3.5vw, 3.2rem);
-    font-weight: 300;
-    line-height: 1.3;
-    margin-bottom: 3rem;
-  }
-
-  .philosophy-quote em {
-    font-style: italic;
-    color: var(--gold-light);
-  }
-
-  .philosophy-body {
-    font-size: 0.75rem;
-    line-height: 2;
-    color: var(--gray);
-    letter-spacing: 0.05em;
-    max-width: 420px;
-  }
-
-  .philosophy-visual {
-    position: relative;
-  }
-
-  .visual-frame {
-    width: 100%;
-    aspect-ratio: 3/4;
-    background: linear-gradient(160deg, #1a1510 0%, #2d2418 60%, #0a0805 100%);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .visual-frame::before {
-    content: '';
-    position: absolute;
-    inset: 2rem;
-    border: 1px solid rgba(184,150,78,0.2);
-  }
-
-  .visual-frame::after {
-    content: 'MAISON';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 3rem;
-    letter-spacing: 0.5em;
-    color: rgba(184,150,78,0.08);
-    white-space: nowrap;
-  }
-
-  .visual-accent {
-    position: absolute;
-    bottom: -2rem;
-    right: -2rem;
-    width: 60%;
-    height: 60%;
-    background: linear-gradient(135deg, #0f1520, #1a2535);
-    border: 1px solid rgba(184,150,78,0.15);
-    z-index: -1;
-  }
-
-  /* ── ATELIER ── */
-  #atelier {
-    padding: 8rem 4rem;
-    background: var(--dark-gray);
-  }
-
-  .atelier-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3rem;
-    margin-top: 5rem;
-  }
-
-  .atelier-card {
-    padding: 3rem;
-    border: 1px solid rgba(184,150,78,0.1);
-    position: relative;
-    transition: border-color 0.4s;
-  }
-
-  .atelier-card:hover { border-color: rgba(184,150,78,0.4); }
-
-  .card-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 4rem;
-    font-weight: 300;
-    color: rgba(184,150,78,0.12);
-    line-height: 1;
-    margin-bottom: 1.5rem;
-  }
-
-  .card-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 300;
-    margin-bottom: 1rem;
-    color: var(--off-white);
-  }
-
-  .card-body {
-    font-size: 0.7rem;
-    line-height: 1.9;
-    color: var(--gray);
-    letter-spacing: 0.05em;
-  }
-
-  .card-line {
-    width: 30px;
-    height: 1px;
-    background: var(--gold);
-    margin-bottom: 1.5rem;
-  }
-
-  /* ── CTA SECTION ── */
-  #cta-section {
-    padding: 10rem 4rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  #cta-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center, rgba(184,150,78,0.06) 0%, transparent 70%);
-  }
-
-  .cta-eyebrow {
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 2rem;
-  }
-
-  .cta-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3rem, 7vw, 7rem);
-    font-weight: 300;
-    line-height: 1;
-    margin-bottom: 3rem;
-  }
-
-  .cta-title em { font-style: italic; color: var(--gold-light); }
-
-  .cta-subtitle {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    color: var(--gray);
-    margin-bottom: 4rem;
-    text-transform: uppercase;
-  }
-
-  .cta-buttons {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    background: var(--gold);
-    color: var(--black);
-    padding: 1.1rem 3rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300;
-    transition: all 0.3s;
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--off-white);
-    padding: 1.1rem 3rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    border: 1px solid rgba(240,237,232,0.3);
-    cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300;
-    transition: all 0.3s;
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    padding: 5rem 4rem 3rem;
-    border-top: 1px solid rgba(184,150,78,0.15);
-    background: #040404;
-  }
-
-  .footer-top {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 4rem;
-    margin-bottom: 5rem;
-  }
-
-  .footer-brand .logo { font-size: 1.4rem; display: block; margin-bottom: 1.5rem; }
-
-  .footer-tagline {
-    font-size: 0.7rem;
-    line-height: 1.9;
-    color: var(--gray);
-    max-width: 280px;
-  }
-
-  .footer-col h4 {
-    font-size: 0.6rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 2rem;
-  }
-
-  .footer-col ul { list-style: none; }
-
-  .footer-col ul li {
-    margin-bottom: 1rem;
-  }
-
-  .footer-col ul li a {
-    font-size: 0.7rem;
-    color: var(--gray);
-    text-decoration: none;
-    letter-spacing: 0.05em;
-    transition: color 0.3s;
-  }
-
-  .footer-col ul li a:hover { color: var(--off-white); }
-
-  .footer-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(255,255,255,0.05);
-  }
-
-  .footer-copy {
-    font-size: 0.6rem;
-    color: rgba(136,136,128,0.5);
-    letter-spacing: 0.1em;
-  }
-
-  .footer-socials {
-    display: flex;
-    gap: 2rem;
-  }
-
-  .footer-socials a {
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gray);
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-
-  .footer-socials a:hover { color: var(--gold); }
-
-  /* ── SCROLL ANIMATIONS ── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.9s ease, transform 0.9s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 1024px) {
-    header { padding: 1.5rem 2rem; }
-    nav { gap: 1.5rem; }
-    #collection, #atelier, #philosophy, #cta-section { padding: 5rem 2rem; }
-    .collection-grid { grid-template-columns: 1fr 1fr; }
-    .collection-item:first-child { grid-column: 1 / -1; grid-row: auto; }
-    .collection-item:first-child .item-image { min-height: 400px; }
-    #philosophy { grid-template-columns: 1fr; gap: 4rem; }
-    .atelier-grid { grid-template-columns: 1fr; }
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
-    .sequence-progress { display: none; }
-  }
-
-  @media (max-width: 640px) {
-    header { padding: 1.2rem 1.5rem; }
-    nav a:not(.nav-cta) { display: none; }
-    .hero-title { font-size: 3.5rem; }
-    .collection-grid { grid-template-columns: 1fr; }
-    .footer-top { grid-template-columns: 1fr; }
-    .scene-label { display: none; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .marquee-track { animation: none; }
-    .reveal { opacity: 1; transform: none; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURUM — Timepieces of Consequence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --void:   #000000;
+      --carbon: #080808;
+      --onyx:   #0e0e0e;
+      --smoke:  #1a1a1a;
+      --ash:    #2e2e2e;
+      --mist:   #5a5a5a;
+      --silver: #9a9a9a;
+      --pearl:  #d4c89a;
+      --gold:   #c9a84c;
+      --champagne: #e8d5a3;
+      --white:  #f5f0e8;
+      --display: 'Cormorant Garamond', serif;
+      --ui:      'Montserrat', sans-serif;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      background: var(--void);
+      color: var(--white);
+      font-family: var(--ui);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 60px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
+      transition: padding 0.4s ease;
+    }
+    nav.scrolled { padding: 18px 60px; background: rgba(0,0,0,0.95); }
+
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nav-logo span { font-style: italic; font-weight: 300; color: var(--pearl); }
+
+    .nav-links {
+      display: flex;
+      gap: 44px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--silver);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--void);
+      background: var(--gold);
+      padding: 11px 26px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--champagne); }
+
+    /* ─── SCROLL SEQUENCE (HERO) ─────────────────────────────── */
+    #sequence-section {
+      position: relative;
+      /* height = n_frames × viewport, controls scroll distance */
+      height: 900vh;
+    }
+
+    #sequence-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    #sequence-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Fallback image layer (while canvas loads) */
+    #seq-fallback {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 60%, #1a1408 0%, #000 70%);
+    }
+
+    /* ─── HERO OVERLAY TEXT ──────────────────────────────────── */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 60px 80px;
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--ui);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 1s 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--display);
+      font-size: clamp(52px, 7vw, 96px);
+      font-weight: 300;
+      line-height: 1.0;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 1s 0.55s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+
+    .hero-sub {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      color: var(--silver);
+      max-width: 340px;
+      line-height: 1.9;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 1s 0.75s forwards;
+    }
+
+    /* Scroll progress indicator */
+    .scroll-progress-track {
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 120px;
+      background: var(--ash);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-line-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--gold);
+      transition: height 0.05s linear;
+    }
+    .scroll-label {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      color: var(--mist);
+      text-transform: uppercase;
+      margin-top: 12px;
+      writing-mode: vertical-lr;
+    }
+
+    /* Frame counter */
+    .frame-counter {
+      position: absolute;
+      left: 60px;
+      bottom: 80px;
+      font-family: var(--display);
+      font-size: 13px;
+      color: var(--mist);
+      letter-spacing: 0.1em;
+    }
+    .frame-counter .current { color: var(--gold); font-size: 20px; }
+
+    /* ─── SECTION: PHILOSOPHY ────────────────────────────────── */
+    .section-philosophy {
+      background: var(--carbon);
+      padding: 160px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .philosophy-eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    .philosophy-headline {
+      font-family: var(--display);
+      font-size: clamp(36px, 4vw, 60px);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--white);
+      margin-bottom: 32px;
+    }
+    .philosophy-headline em { font-style: italic; color: var(--gold); }
+
+    .philosophy-body {
+      font-size: 13px;
+      line-height: 2.1;
+      color: var(--silver);
+      max-width: 460px;
+    }
+
+    .philosophy-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .stat-item {
+      border-left: 1px solid var(--ash);
+      padding-left: 28px;
+    }
+    .stat-number {
+      font-family: var(--display);
+      font-size: 56px;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+    .stat-unit {
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--pearl);
+    }
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--mist);
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    /* ─── SECTION: COLLECTION TEASE ─────────────────────────── */
+    .section-collection {
+      background: var(--void);
+      padding: 140px 60px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 72px;
+    }
+
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(32px, 3.5vw, 52px);
+      font-weight: 300;
+      color: var(--white);
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    .section-link {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ash);
+      padding-bottom: 4px;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .section-link:hover { color: var(--champagne); border-color: var(--gold); }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .collection-card {
+      position: relative;
+      aspect-ratio: 3/4;
+      background: var(--smoke);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .collection-card-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.7s ease;
+    }
+
+    /* Gradient placeholder backgrounds for each card */
+    .card-bg-1 { background: radial-gradient(ellipse 70% 80% at 50% 65%, #1c1408 0%, #050505 70%); }
+    .card-bg-2 { background: radial-gradient(ellipse 70% 80% at 50% 55%, #0f110f 0%, #050505 70%); }
+    .card-bg-3 { background: radial-gradient(ellipse 70% 80% at 50% 65%, #150f0f 0%, #050505 70%); }
+
+    .collection-card:hover .collection-card-bg { transform: scale(1.06); }
+
+    .collection-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 36px 28px;
+    }
+
+    .card-ref {
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .card-name {
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .card-price {
+      font-size: 12px;
+      color: var(--silver);
+      letter-spacing: 0.15em;
+    }
+
+    .card-hover-line {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .collection-card:hover .card-hover-line { transform: scaleX(1); }
+
+    /* Watch icon placeholders in cards */
+    .card-watch-visual {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .watch-silhouette {
+      width: 120px;
+      height: 160px;
+      opacity: 0.25;
+    }
+
+    /* ─── SECTION: CRAFT ─────────────────────────────────────── */
+    .section-craft {
+      background: var(--onyx);
+      padding: 160px 60px;
+    }
+
+    .craft-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 120px;
+      align-items: center;
+    }
+
+    .craft-visual {
+      aspect-ratio: 1;
+      background: radial-gradient(ellipse 60% 70% at 50% 60%, #1a1408 0%, #050505 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .craft-visual::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 50%;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      opacity: 0.5;
+    }
+
+    .craft-svg {
+      width: 200px;
+      height: 200px;
+      opacity: 0.2;
+    }
+
+    .craft-content {}
+
+    .craft-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 48px;
+    }
+
+    .craft-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 24px;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--ash);
+      align-items: start;
+    }
+    .craft-step:first-child { border-top: 1px solid var(--ash); }
+
+    .step-num {
+      font-family: var(--display);
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      padding-top: 2px;
+    }
+
+    .step-title {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .step-body {
+      font-size: 12px;
+      line-height: 2;
+      color: var(--mist);
+    }
+
+    /* ─── SECTION: SIGNATURE ─────────────────────────────────── */
+    .section-signature {
+      background: var(--void);
+      padding: 200px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .signature-radial {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(201, 168, 76, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .signature-eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+    }
+
+    .signature-headline {
+      font-family: var(--display);
+      font-size: clamp(44px, 6vw, 84px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .signature-headline em { font-style: italic; color: var(--gold); }
+
+    .signature-rule {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 40px auto;
+    }
+
+    .signature-body {
+      font-size: 13px;
+      line-height: 2.2;
+      color: var(--silver);
+      max-width: 520px;
+      margin: 0 auto 56px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--void);
+      background: var(--gold);
+      padding: 16px 44px;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--champagne); transform: translateY(-1px); }
+
+    .btn-ghost {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: transparent;
+      padding: 16px 44px;
+      text-decoration: none;
+      border: 1px solid var(--ash);
+      margin-left: 16px;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--champagne); }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      background: var(--carbon);
+      border-top: 1px solid var(--ash);
+      padding: 80px 60px 60px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 72px;
+    }
+
+    .footer-brand-name {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      margin-bottom: 16px;
+    }
+    .footer-brand-tagline {
+      font-size: 11px;
+      color: var(--mist);
+      line-height: 1.9;
+      letter-spacing: 0.05em;
+      max-width: 260px;
+    }
+
+    .footer-col-title {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 24px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .footer-links a {
+      font-size: 12px;
+      color: var(--mist);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--ash);
+      padding-top: 32px;
+    }
+
+    .footer-copy {
+      font-size: 10px;
+      color: var(--ash);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 32px;
+    }
+    .footer-legal a {
+      font-size: 10px;
+      color: var(--ash);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    .footer-legal a:hover { color: var(--mist); }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── LOADING SCREEN ─────────────────────────────────────── */
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: var(--void);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+
+    .loading-logo {
+      font-family: var(--display);
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--gold);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    .loading-bar-track {
+      width: 200px;
+      height: 1px;
+      background: var(--ash);
+      position: relative;
+      overflow: hidden;
+    }
+    .loading-bar-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      transition: width 0.1s linear;
+    }
+
+    .loading-text {
+      font-size: 9px;
+      letter-spacing: 0.4em;
+      color: var(--mist);
+      text-transform: uppercase;
+      margin-top: 20px;
+    }
+
+    /* ─── MOBILE ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .nav-links, .nav-cta { display: none; }
+
+      .hero-overlay { padding: 0 24px 60px; }
+      .scroll-progress-track { right: 24px; }
+      .frame-counter { left: 24px; bottom: 60px; }
+
+      .section-philosophy,
+      .craft-grid { grid-template-columns: 1fr; gap: 48px; }
+      .section-philosophy,
+      .section-collection,
+      .section-craft,
+      .section-signature { padding: 100px 24px; }
+
+      .collection-grid { grid-template-columns: 1fr; gap: 2px; }
+      .collection-card { aspect-ratio: 4/3; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      footer { padding: 60px 24px 40px; }
+
+      .btn-ghost { margin-left: 0; margin-top: 12px; }
+      .signature-headline { font-size: 36px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header id="main-header">
-  <a href="#" class="logo">MAISON</a>
-  <nav>
-    <a href="#collection">Collection</a>
-    <a href="#philosophy">Atelier</a>
-    <a href="#atelier">Savoir-Faire</a>
-    <a href="#cta-section" class="nav-cta">Book Consultation</a>
+  <!-- LOADING SCREEN -->
+  <div id="loading">
+    <div class="loading-logo">Aurum</div>
+    <div class="loading-bar-track">
+      <div class="loading-bar-fill" id="loading-fill"></div>
+    </div>
+    <div class="loading-text" id="loading-text">Preparing your experience</div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="#" class="nav-logo">AURUM <span>&</span> Co.</a>
+    <ul class="nav-links">
+      <li><a href="#collection">Collection</a></li>
+      <li><a href="#craft">Atelier</a></li>
+      <li><a href="#about">Heritage</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#collection" class="nav-cta">Discover</a>
   </nav>
-</header>
 
-<!-- SCROLL SEQUENCE HERO -->
-<section id="scroll-sequence">
-  <div class="sequence-sticky">
-    <canvas id="sequence-canvas"></canvas>
-    <div class="sequence-overlay"></div>
+  <!-- ═══ SCROLL SEQUENCE SECTION ═══════════════════════════════ -->
+  <section id="sequence-section">
+    <div id="sequence-sticky">
+      <!-- Fallback background -->
+      <div id="seq-fallback"></div>
 
-    <div class="sequence-content" id="sequence-content">
-      <p class="eyebrow">Autumn / Winter Collection 2025</p>
-      <h1 class="hero-title">The Art<br>of <em>Silence</em></h1>
-      <p class="hero-sub">Where craftsmanship meets eternity</p>
-    </div>
+      <!-- Main canvas for image sequence -->
+      <canvas id="sequence-canvas"></canvas>
 
-    <div class="scroll-hint" id="scroll-hint">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
-
-    <div class="scene-label" id="scene-label">
-      <div class="scene-number">01</div>
-      <div class="scene-text">The Silhouette</div>
-    </div>
-
-    <div class="sequence-progress" id="sequence-progress"></div>
-  </div>
-</section>
-
-<!-- MARQUEE -->
-<div class="marquee-section">
-  <div class="marquee-track" id="marquee-track">
-    <span class="marquee-item">Haute Couture</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Bespoke Tailoring</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Artisan Craft</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Timeless Design</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Paris Atelier</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Since 1947</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Haute Couture</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Bespoke Tailoring</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Artisan Craft</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Timeless Design</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Paris Atelier</span>
-    <span class="marquee-dot">◆</span>
-    <span class="marquee-item">Since 1947</span>
-    <span class="marquee-dot">◆</span>
-  </div>
-</div>
-
-<!-- COLLECTION -->
-<section id="collection">
-  <div class="section-header reveal">
-    <div>
-      <p class="section-eyebrow">The New Collection</p>
-      <h2 class="section-title">Dressed in <em>Light</em></h2>
-    </div>
-    <a href="#" class="section-link">View All Pieces</a>
-  </div>
-
-  <div class="collection-grid">
-    <div class="collection-item reveal">
-      <div class="img-placeholder img-1" style="min-height:600px;">
-        <span style="writing-mode:vertical-rl;letter-spacing:0.4em;font-family:'Cormorant Garamond',serif;font-size:0.9rem;">THE EVENING GOWN</span>
+      <!-- Hero text overlay -->
+      <div class="hero-overlay">
+        <p class="hero-eyebrow">Introducing the Meridian Collection</p>
+        <h1 class="hero-title">
+          Time, <em>distilled</em><br>to its essence.
+        </h1>
+        <p class="hero-sub">
+          Each piece is a singular argument for precision — hand-assembled over 400 hours by a single master.
+        </p>
       </div>
-      <div class="item-overlay">
-        <div class="item-name">La Robe du Soir</div>
-        <div class="item-price">From £ 4,200</div>
+
+      <!-- Scroll progress indicator -->
+      <div class="scroll-progress-track">
+        <div class="scroll-line">
+          <div class="scroll-line-fill" id="scroll-fill"></div>
+        </div>
+        <div class="scroll-label">Scroll</div>
+      </div>
+
+      <!-- Frame counter -->
+      <div class="frame-counter">
+        <span class="current" id="frame-current">01</span>
+        <span style="color:var(--ash)"> / </span>
+        <span id="frame-total">09</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ PHILOSOPHY SECTION ════════════════════════════════════ -->
+  <section class="section-philosophy" id="about">
+    <div class="reveal">
+      <p class="philosophy-eyebrow">Our Philosophy</p>
+      <h2 class="philosophy-headline">
+        We do not make watches.<br>
+        We articulate <em>time.</em>
+      </h2>
+      <p class="philosophy-body">
+        Founded in 1887, Aurum & Co. has pursued a single obsession: the honest representation of a passing second. No flourish without function. No gesture without meaning. Every component earns its place or does not exist.
+      </p>
+    </div>
+    <div class="philosophy-stats reveal">
+      <div class="stat-item">
+        <div class="stat-number">400<span class="stat-unit">h</span></div>
+        <div class="stat-label">Assembly time per piece</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">±1<span class="stat-unit">s</span></div>
+        <div class="stat-label">Daily accuracy tolerance</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">137<span class="stat-unit"></span></div>
+        <div class="stat-label">Individual components</div>
       </div>
     </div>
-    <div class="collection-item reveal reveal-delay-1">
-      <div class="img-placeholder img-2" style="min-height:280px;">
-        <span style="letter-spacing:0.3em;font-family:'Cormorant Garamond',serif;">THE BLAZER</span>
-      </div>
-      <div class="item-overlay">
-        <div class="item-name">Le Veston Structuré</div>
-        <div class="item-price">From £ 2,800</div>
-      </div>
-    </div>
-    <div class="collection-item reveal reveal-delay-2">
-      <div class="img-placeholder img-3" style="min-height:280px;">
-        <span style="letter-spacing:0.3em;font-family:'Cormorant Garamond',serif;">THE COAT</span>
-      </div>
-      <div class="item-overlay">
-        <div class="item-name">Le Manteau d'Hiver</div>
-        <div class="item-price">From £ 5,600</div>
-      </div>
-    </div>
-    <div class="collection-item reveal reveal-delay-1">
-      <div class="img-placeholder img-4" style="min-height:280px;">
-        <span style="letter-spacing:0.3em;font-family:'Cormorant Garamond',serif;">THE SUIT</span>
-      </div>
-      <div class="item-overlay">
-        <div class="item-name">Le Costume Taillé</div>
-        <div class="item-price">From £ 3,400</div>
-      </div>
-    </div>
-    <div class="collection-item reveal reveal-delay-2">
-      <div class="img-placeholder img-2" style="min-height:280px;">
-        <span style="letter-spacing:0.3em;font-family:'Cormorant Garamond',serif;">THE DRESS</span>
-      </div>
-      <div class="item-overlay">
-        <div class="item-name">La Robe Midi</div>
-        <div class="item-price">From £ 1,900</div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- PHILOSOPHY -->
-<section id="philosophy">
-  <div class="philosophy-text">
-    <p class="label reveal">Our Philosophy</p>
-    <blockquote class="philosophy-quote reveal reveal-delay-1">
-      "Every stitch tells a story.<br>Every silhouette holds <em>a memory.</em>"
-    </blockquote>
-    <p class="philosophy-body reveal reveal-delay-2">
-      Since 1947, Maison has stood at the intersection of tradition and vision. Our ateliers in Paris are where the impossible becomes wearable — where master artisans spend hundreds of hours perfecting a single garment that will be worn for a lifetime.
-      <br><br>
-      We believe in dressing the soul, not merely the body. Each piece emerges from a dialogue between the wearer and the craft — a conversation that has no shortcuts.
+  <!-- ═══ COLLECTION SECTION ════════════════════════════════════ -->
+  <section class="section-collection" id="collection">
+    <div class="section-header reveal">
+      <h2 class="section-title">The <em>Meridian</em><br>Collection</h2>
+      <a href="#" class="section-link">View all references</a>
+    </div>
+
+    <div class="collection-grid">
+
+      <div class="collection-card reveal">
+        <div class="collection-card-bg card-bg-1">
+          <div class="card-watch-visual">
+            <!-- Inline SVG watch silhouette -->
+            <svg class="watch-silhouette" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="45" y="0" width="30" height="20" rx="4" fill="#c9a84c" opacity="0.6"/>
+              <rect x="45" y="140" width="30" height="20" rx="4" fill="#c9a84c" opacity="0.6"/>
+              <circle cx="60" cy="80" r="50" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+              <circle cx="60" cy="80" r="44" stroke="#c9a84c" stroke-width="0.5" fill="none" opacity="0.4"/>
+              <line x1="60" y1="42" x2="60" y2="52" stroke="#c9a84c" stroke-width="1.5"/>
+              <line x1="60" y1="108" x2="60" y2="118" stroke="#c9a84c" stroke-width="1.5"/>
+              <line x1="22" y1="80" x2="32" y2="80" stroke="#c9a84c" stroke-width="1.5"/>
+              <line x1="88" y1="80" x2="98" y2="80" stroke="#c9a84c" stroke-width="1.5"/>
+              <line x1="60" y1="80" x2="60" y2="52" stroke="#c9a84c" stroke-width="1"/>
+              <line x1="60" y1="80" x2="78" y2="80" stroke="#c9a84c" stroke-width="1"/>
+              <circle cx="60" cy="80" r="3" fill="#c9a84c"/>
+            </svg>
+          </div>
+        </div>
+        <div class="collection-card-overlay">
+          <div class="card-ref">Ref. M-001</div>
+          <div class="card-name">Meridian<br>Classique</div>
+          <div class="card-price">From $24,500</div>
+        </div>
+        <div class="card-hover-line"></div>
+      </div>
+
+      <div class="collection-card reveal">
+        <div class="collection-card-bg card-bg-2">
+          <div class="card-watch-visual">
+            <svg class="watch-silhouette" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="45" y="0" width="30" height="20" rx="2" fill="#c9a84c" opacity="0.6"/>
+              <rect x="45" y="140" width="30" height="20" rx="2" fill="#c9a84c" opacity="0.6"/>
+              <rect x="10" y="30" width="100" height="100" rx="8" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+              <rect x="16" y="36" width="88" height="88" rx="6" stroke="#c9a84c" stroke-width="0.5" fill="none" opacity="0.4"/>
+              <line x1="60" y1="44" x2="60" y2="54" stroke="#c9a84c" stroke-width="1.5"/>
+              <line x1="60" y1="116" x2="60" y2="106" stroke="#c9a84c" stroke-width="1.5"/>
+              <line x1="18" y1="80" x2="28" y2="80" stroke="#c9a84c" stroke-width="1.5"/>
+              <line x1="102" y1="80" x2="92" y2="80" stroke="#c9a84c" stroke-width="1.5"/>
+              <line x1="60" y1="80" x2="60" y2="54" stroke="#c9a84c" stroke-width="1"/>
+              <line x1="60" y1="80" x2="80" y2="80" stroke="#c9a84c" stroke-width="1"/>
+              <circle cx="60" cy="80" r="3" fill="#c9a84c"/>
+            </svg>
+          </div>
+        </div>
+        <div class="collection-card-overlay">
+          <div class="card-ref">Ref. M-004</div>
+          <div class="card-name">Meridian<br>Carré</div>
+          <div class="card-price">From $31,200</div>
+        </div>
+        <div class="card-hover-line"></div>
+      </div>
+
+      <div class="collection-card reveal">
+        <div class="collection-card-bg card-bg-3">
+          <div class="card-watch-visual">
+            <svg class="watch-silhouette" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="45" y="0" width="30" height="22" rx="4" fill="#c9a84c" opacity="0.6"/>
+              <rect x="45" y="138" width="30" height="22" rx="4" fill="#c9a84c" opacity="0.6"/>
+              <circle cx="60" cy="80" r="52" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+              <circle cx="60" cy="80" r="46" stroke="#c9a84c" stroke-width="0.5" fill="none" opacity="0.3"/>
+              <circle cx="60" cy="80" r="38" stroke="#c9a84c" stroke-width="0.5" fill="none" opacity="0.15"/>
+              <!-- Tourbillon-like detail -->
+              <circle cx="60" cy="95" r="10" stroke="#c9a84c" stroke-width="0.8" fill="none" opacity="0.6"/>
+              <circle cx="60" cy="95" r="5" stroke="#c9a84c" stroke-width="0.5" fill="none" opacity="0.4"/>
+              <line x1="60" y1="80" x2="60" y2="54" stroke="#c9a84c" stroke-width="1"/>
+              <line x1="60" y1="80" x2="76" y2="72" stroke="#c9a84c" stroke-width="0.8"/>
+              <circle cx="60" cy="80" r="2.5" fill="#c9a84c"/>
+            </svg>
+          </div>
+        </div>
+        <div class="collection-card-overlay">
+          <div class="card-ref">Ref. M-009</div>
+          <div class="card-name">Meridian<br>Tourbillon</div>
+          <div class="card-price">From $148,000</div>
+        </div>
+        <div class="card-hover-line"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ CRAFT SECTION ════════════════════════════════════════ -->
+  <section class="section-craft" id="craft">
+    <div class="craft-grid">
+      <div class="craft-visual reveal">
+        <!-- Animated gear/movement SVG -->
+        <svg class="craft-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="90" stroke="#c9a84c" stroke-width="0.5"/>
+          <circle cx="100" cy="100" r="70" stroke="#c9a84c" stroke-width="0.5" opacity="0.5"/>
+          <circle cx="100" cy="100" r="50" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+          <!-- Gear teeth outer -->
+          <circle cx="100" cy="8" r="5" fill="#c9a84c" opacity="0.4"/>
+          <circle cx="100" cy="192" r="5" fill="#c9a84c" opacity="0.4"/>
+          <circle cx="8" cy="100" r="5" fill="#c9a84c" opacity="0.4"/>
+          <circle cx="192" cy="100" r="5" fill="#c9a84c" opacity="0.4"/>
+          <circle cx="36" cy="36" r="4" fill="#c9a84c" opacity="0.3"/>
+          <circle cx="164" cy="36" r="4" fill="#c9a84c" opacity="0.3"/>
+          <circle cx="36" cy="164" r="4" fill="#c9a84c" opacity="0.3"/>
+          <circle cx="164" cy="164" r="4" fill="#c9a84c" opacity="0.3"/>
+          <!-- Cross hairs -->
+          <line x1="100" y1="10" x2="100" y2="190" stroke="#c9a84c" stroke-width="0.3" opacity="0.2"/>
+          <line x1="10" y1="100" x2="190" y2="100" stroke="#c9a84c" stroke-width="0.3" opacity="0.2"/>
+          <!-- Center -->
+          <circle cx="100" cy="100" r="8" stroke="#c9a84c" stroke-width="1" fill="none"/>
+          <circle cx="100" cy="100" r="2" fill="#c9a84c"/>
+        </svg>
+      </div>
+
+      <div class="craft-content reveal">
+        <p class="philosophy-eyebrow">The Atelier</p>
+        <h2 class="philosophy-headline" style="font-size: clamp(30px, 3vw, 46px);">
+          A movement built<br>by <em>one pair of hands.</em>
+        </h2>
+        <div class="craft-steps">
+          <div class="craft-step">
+            <div class="step-num">I.</div>
+            <div>
+              <div class="step-title">Raw Material Selection</div>
+              <p class="step-body">18-carat gold alloys and surgical-grade steel are assessed individually. Only material with verified provenance enters the workshop.</p>
+            </div>
+          </div>
+          <div class="craft-step">
+            <div class="step-num">II.</div>
+            <div>
+              <div class="step-title">Movement Assembly</div>
+              <p class="step-body">137 individual components are assembled under 40x magnification. Each bearing surface is polished to a mirror finish by hand.</p>
+            </div>
+          </div>
+          <div class="craft-step">
+            <div class="step-num">III.</div>
+            <div>
+              <div class="step-title">Casing & Regulation</div>
+              <p class="step-body">Once cased, the watch is worn on a wrist machine for 21 days before final regulation to ±1 second daily.</p>
+            </div>
+          </div>
+          <div class="craft-step">
+            <div class="step-num">IV.</div>
+            <div>
+              <div class="step-title">Provenance Certificate</div>
+              <p class="step-body">Each piece ships with the name of its maker, recorded hours, and a numbered certificate of authenticity.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SIGNATURE CTA ═════════════════════════════════════════ -->
+  <section class="section-signature">
+    <div class="signature-radial"></div>
+    <p class="signature-eyebrow reveal">Private Appointments</p>
+    <h2 class="signature-headline reveal">
+      Time does not wait.<br>
+      <em>Neither should you.</em>
+    </h2>
+    <div class="signature-rule reveal"></div>
+    <p class="signature-body reveal">
+      Visit our atelier by private appointment only. Our horologists will guide you through the collection and, should you wish, create a commission entirely unique to you.
     </p>
-  </div>
-  <div class="philosophy-visual reveal reveal-delay-1">
-    <div class="visual-frame"></div>
-    <div class="visual-accent"></div>
-  </div>
-</section>
-
-<!-- ATELIER -->
-<section id="atelier">
-  <div class="section-header reveal">
-    <div>
-      <p class="section-eyebrow">Savoir-Faire</p>
-      <h2 class="section-title">The <em>Process</em></h2>
+    <div class="reveal">
+      <a href="#" class="btn-primary">Book an Appointment</a>
+      <a href="#collection" class="btn-ghost">View Collection</a>
     </div>
-  </div>
-  <div class="atelier-grid">
-    <div class="atelier-card reveal">
-      <div class="card-number">01</div>
-      <div class="card-line"></div>
-      <h3 class="card-title">The Consultation</h3>
-      <p class="card-body">Every relationship begins with listening. Our master tailors spend hours understanding not just your measurements, but your life — how you move, where you go, who you wish to become.</p>
+  </section>
+
+  <!-- ═══ FOOTER ════════════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">AURUM</div>
+        <p class="footer-brand-tagline">
+          Timepieces of consequence, made by a single pair of hands. Geneva, since 1887.
+        </p>
+      </div>
+      <div>
+        <div class="footer-col-title">Collection</div>
+        <ul class="footer-links">
+          <li><a href="#">Meridian Classique</a></li>
+          <li><a href="#">Meridian Carré</a></li>
+          <li><a href="#">Meridian Tourbillon</a></li>
+          <li><a href="#">Bespoke</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Atelier</div>
+        <ul class="footer-links">
+          <li><a href="#">Our Philosophy</a></li>
+          <li><a href="#">The Craftsmen</a></li>
+          <li><a href="#">Materials</a></li>
+          <li><a href="#">Heritage</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-links">
+          <li><a href="#">Private Appointments</a></li>
+          <li><a href="#">Care & Service</a></li>
+          <li><a href="#">Press Enquiries</a></li>
+          <li><a href="#">Geneva Atelier</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="atelier-card reveal reveal-delay-1">
-      <div class="card-number">02</div>
-      <div class="card-line"></div>
-      <h3 class="card-title">The Pattern</h3>
-      <p class="card-body">Drawn by hand on paper that has absorbed decades of expertise, each pattern is a unique architectural blueprint — a map of geometry and proportion specific to you alone.</p>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 Aurum & Co. — Demonstrating web excellence for WebDone Co.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </div>
     </div>
-    <div class="atelier-card reveal reveal-delay-2">
-      <div class="card-number">03</div>
-      <div class="card-line"></div>
-      <h3 class="card-title">The Making</h3>
-      <p class="card-body">Over two hundred hours of hand-stitching, pressing, and fitting. Fabrics sourced from the finest mills in Italy and Scotland. A garment that will outlast its era.</p>
-    </div>
-  </div>
-</section>
+  </footer>
 
-<!-- CTA -->
-<section id="cta-section">
-  <p class="cta-eyebrow reveal">Begin Your Journey</p>
-  <h2 class="cta-title reveal reveal-delay-1">Wear What<br><em>Endures</em></h2>
-  <p class="cta-subtitle reveal reveal-delay-2">Private appointments available in Paris, London & Dubai</p>
-  <div class="cta-buttons reveal reveal-delay-3">
-    <a href="#" class="btn-primary">Book a Consultation</a>
-    <a href="#collection" class="btn-secondary">Explore Collection</a>
-  </div>
-</section>
+  <!-- ═══ JAVASCRIPT ════════════════════════════════════════════ -->
+  <script>
+  (function() {
+    'use strict';
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <a href="#" class="logo">MAISON</a>
-      <p class="footer-tagline">Haute couture for those who understand that true luxury is not purchased — it is inherited through time.</p>
-    </div>
-    <div class="footer-col">
-      <h4>Collections</h4>
-      <ul>
-        <li><a href="#">Autumn / Winter</a></li>
-        <li><a href="#">Spring / Summer</a></li>
-        <li><a href="#">Bridal Atelier</a></li>
-        <li><a href="#">Men's Tailoring</a></li>
-        <li><a href="#">Accessories</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>The House</h4>
-      <ul>
-        <li><a href="#">Our Story</a></li>
-        <li><a href="#">The Atelier</a></li>
-        <li><a href="#">Savoir-Faire</a></li>
-        <li><a href="#">Press</a></li>
-        <li><a href="#">Careers</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Services</h4>
-      <ul>
-        <li><a href="#">Bespoke Orders</a></li>
-        <li><a href="#">Private Appointments</a></li>
-        <li><a href="#">Alterations</a></li>
-        <li><a href="#">Care & Restoration</a></li>
-        <li><a href="#">Gift Cards</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p class="footer-copy">© 2025 Maison. All rights reserved. Paris — London — Dubai</p>
-    <div class="footer-socials">
-      <a href="#">Instagram</a>
-      <a href="#">Pinterest</a>
-      <a href="#">LinkedIn</a>
-    </div>
-  </div>
-</footer>
+    /* ── CONFIG ──────────────────────────────────────────────── */
+    // UPDATE THESE PATHS when your images are in the repo
+    // Pattern: images/watch_001.jpg through images/watch_009.jpg
+    // OR use the demo fallback (gradient canvas) if images aren't ready
+    const IMAGE_PATHS = [
+      'images/watch_001.jpg',
+      'images/watch_002.jpg',
+      'images/watch_003.jpg',
+      'images/watch_004.jpg',
+      'images/watch_005.jpg',
+      'images/watch_006.jpg',
+      'images/watch_007.jpg',
+      'images/watch_008.jpg',
+      'images/watch_009.jpg',
+    ];
+    const TOTAL_FRAMES = IMAGE_PATHS.length;
 
-<script>
-// ── SCROLL SEQUENCE ENGINE ──
-(function() {
-  const canvas = document.getElementById('sequence-canvas');
-  const ctx = canvas.getContext('2d');
-  const section = document.getElementById('scroll-sequence');
-  const sceneLabel = document.getElementById('scene-label');
-  const progressContainer = document.getElementById('sequence-progress');
-  const scrollHint = document.getElementById('scroll-hint');
-  const content = document.getElementById('sequence-content');
+    /* ── ELEMENTS ────────────────────────────────────────────── */
+    const loading      = document.getElementById('loading');
+    const loadFill     = document.getElementById('loading-fill');
+    const loadText     = document.getElementById('loading-text');
+    const canvas       = document.getElementById('sequence-canvas');
+    const ctx          = canvas.getContext('2d');
+    const seqSection   = document.getElementById('sequence-section');
+    const scrollFill   = document.getElementById('scroll-fill');
+    const frameCurrent = document.getElementById('frame-current');
+    const frameTotal   = document.getElementById('frame-total');
+    const nav          = document.getElementById('main-nav');
 
-  // Scene definitions — cinematic gradient frames
-  const scenes = [
-    {
-      number: '01', text: 'The Silhouette',
-      gradient: { type: 'radial', colors: ['#1a1208', '#2d1f0a', '#080808'] },
-      overlay: 'rgba(8,8,8,0.2)'
-    },
-    {
-      number: '02', text: 'The Fabric',
-      gradient: { type: 'linear', colors: ['#0a0f1a', '#0f1e35', '#080808'] },
-      overlay: 'rgba(8,8,8,0.15)'
-    },
-    {
-      number: '03', text: 'The Light',
-      gradient: { type: 'radial', colors: ['#1a1005', '#b8964e22', '#080808'] },
-      overlay: 'rgba(8,8,8,0.1)'
-    },
-    {
-      number: '04', text: 'The Structure',
-      gradient: { type: 'linear', colors: ['#10050a', '#201018', '#080808'] },
-      overlay: 'rgba(8,8,8,0.2)'
-    },
-    {
-      number: '05', text: 'The Collection',
-      gradient: { type: 'radial', colors: ['#0a1510', '#0f2018', '#080808'] },
-      overlay: 'rgba(8,8,8,0.15)'
-    },
-    {
-      number: '06', text: 'The Legacy',
-      gradient: { type: 'radial', colors: ['#1a1208', '#b8964e15', '#080808'] },
-      overlay: 'rgba(8,8,8,0.05)'
-    },
-  ];
+    frameTotal.textContent = String(TOTAL_FRAMES).padStart(2, '0');
 
-  // Build progress dots
-  scenes.forEach((_, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
-    progressContainer.appendChild(dot);
-  });
-
-  const dots = progressContainer.querySelectorAll('.progress-dot');
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  let currentSceneIndex = -1;
-  let animFrame = null;
-  let targetProgress = 0;
-  let currentProgress = 0;
-
-  // Particle system for atmosphere
-  const particles = Array.from({length: 60}, () => ({
-    x: Math.random(),
-    y: Math.random(),
-    size: Math.random() * 1.5 + 0.3,
-    opacity: Math.random() * 0.4 + 0.05,
-    speed: Math.random() * 0.0002 + 0.00005,
-    drift: (Math.random() - 0.5) * 0.0001
-  }));
-
-  function drawScene(sceneIndex, progress, particleTime) {
-    const scene = scenes[sceneIndex] || scenes[0];
-    const nextScene = scenes[Math.min(sceneIndex + 1, scenes.length - 1)];
-    const t = progress; // transition progress 0-1
-
-    const W = canvas.width;
-    const H = canvas.height;
-
-    ctx.clearRect(0, 0, W, H);
-
-    // Background gradient
-    let grad;
-    if (scene.gradient.type === 'radial') {
-      grad = ctx.createRadialGradient(W*0.5, H*0.4, 0, W*0.5, H*0.4, Math.max(W,H)*0.8);
-    } else {
-      grad = ctx.createLinearGradient(0, 0, W, H);
+    /* ── CANVAS SIZING ───────────────────────────────────────── */
+    function resizeCanvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawFrame(currentFrame);
     }
 
-    const cols = scene.gradient.colors;
-    grad.addColorStop(0, cols[0]);
-    grad.addColorStop(0.5, cols[1] || cols[0]);
-    grad.addColorStop(1, cols[2] || cols[1] || cols[0]);
+    /* ── IMAGE LOADING ───────────────────────────────────────── */
+    const images = new Array(TOTAL_FRAMES).fill(null);
+    let   loadedCount = 0;
+    let   imagesReady = false;
+    let   useFallback = false;
+    let   currentFrame = 0;
 
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
+    function drawFallbackFrame(frameIndex) {
+      // Beautiful gradient fallback when images not yet provided
+      const t = frameIndex / (TOTAL_FRAMES - 1);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Subtle light beam
-    const beamGrad = ctx.createRadialGradient(W*0.5, H*0.2, 0, W*0.5, H*0.2, H*0.7);
-    beamGrad.addColorStop(0, `rgba(184,150,78,${0.04 + t * 0.03})`);
-    beamGrad.addColorStop(1, 'transparent');
-    ctx.fillStyle = beamGrad;
-    ctx.fillRect(0, 0, W, H);
+      // Void background
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Particles (dust/atmosphere)
-    particles.forEach(p => {
-      const px = ((p.x + particleTime * p.drift + 10) % 1) * W;
-      const py = ((p.y + particleTime * p.speed + 10) % 1) * H;
+      // Spotlight radial — shifts angle as frames progress
+      const cx = canvas.width  * 0.5;
+      const cy = canvas.height * 0.55;
+      const angle = t * Math.PI * 0.25 - Math.PI * 0.1;
+      const spotX = cx + Math.sin(angle) * canvas.width * 0.12;
+      const spotY = cy - Math.cos(angle) * canvas.height * 0.05;
+
+      const grad = ctx.createRadialGradient(spotX, spotY - 100, 0, spotX, spotY, canvas.height * 0.55);
+      grad.addColorStop(0,    'rgba(201,168,76,0.12)');
+      grad.addColorStop(0.3,  'rgba(201,168,76,0.04)');
+      grad.addColorStop(1,    'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Watch silhouette (placeholder)
+      const wR = Math.min(canvas.width, canvas.height) * 0.22;
+      const wX = spotX;
+      const wY = spotY;
+      const scale = 0.92 + t * 0.08 + Math.sin(t * Math.PI) * 0.04;
+
+      ctx.save();
+      ctx.translate(wX, wY);
+      ctx.scale(scale, scale);
+      ctx.rotate(angle * 0.15);
+
+      // Case
       ctx.beginPath();
-      ctx.arc(px, py, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(184,150,78,${p.opacity * (0.5 + t * 0.5)})`;
+      ctx.arc(0, 0, wR, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(201,168,76,${0.25 + t * 0.2})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Inner ring
+      ctx.beginPath();
+      ctx.arc(0, 0, wR * 0.88, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(201,168,76,${0.1 + t * 0.1})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+
+      // Hour markers
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+        const r1 = wR * 0.82;
+        const r2 = wR * (i % 3 === 0 ? 0.72 : 0.78);
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(a) * r1, Math.sin(a) * r1);
+        ctx.lineTo(Math.cos(a) * r2, Math.sin(a) * r2);
+        ctx.strokeStyle = `rgba(201,168,76,${0.5 + t * 0.3})`;
+        ctx.lineWidth = i % 3 === 0 ? 1.5 : 0.8;
+        ctx.stroke();
+      }
+
+      // Hour hand (10:10 position evolving)
+      const hourAngle = -Math.PI * 0.5 + t * 0.2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(hourAngle) * wR * 0.55, Math.sin(hourAngle) * wR * 0.55);
+      ctx.strokeStyle = `rgba(201,168,76,${0.7 + t * 0.2})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Minute hand
+      const minAngle = Math.PI * 0.15 - t * 0.1;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(minAngle) * wR * 0.7, Math.sin(minAngle) * wR * 0.7);
+      ctx.strokeStyle = `rgba(201,168,76,${0.7 + t * 0.2})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Center dot
+      ctx.beginPath();
+      ctx.arc(0, 0, 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(201,168,76,0.9)';
       ctx.fill();
-    });
 
-    // Horizontal light lines (cinematic feel)
-    for (let i = 0; i < 3; i++) {
-      const y = H * (0.3 + i * 0.2 + Math.sin(particleTime * 0.5 + i) * 0.02);
-      const lineGrad = ctx.createLinearGradient(0, y, W, y);
-      lineGrad.addColorStop(0, 'transparent');
-      lineGrad.addColorStop(0.3, `rgba(184,150,78,${0.03 + i * 0.01})`);
-      lineGrad.addColorStop(0.7, `rgba(184,150,78,${0.03 + i * 0.01})`);
-      lineGrad.addColorStop(1, 'transparent');
-      ctx.fillStyle = lineGrad;
-      ctx.fillRect(0, y - 0.5, W, 1);
+      // Strap top
+      ctx.fillStyle = `rgba(15,12,8,${0.7 + t * 0.2})`;
+      ctx.fillRect(-wR * 0.28, -wR * 1.45, wR * 0.56, wR * 0.48);
+
+      // Strap bottom
+      ctx.fillRect(-wR * 0.28, wR * 0.97, wR * 0.56, wR * 0.48);
+
+      // Lug detail
+      ctx.strokeStyle = `rgba(201,168,76,${0.15 + t * 0.1})`;
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(-wR * 0.28, -wR * 1.45, wR * 0.56, wR * 0.48);
+      ctx.strokeRect(-wR * 0.28, wR * 0.97, wR * 0.56, wR * 0.48);
+
+      ctx.restore();
+
+      // Vignette
+      const vig = ctx.createRadialGradient(cx, canvas.height * 0.5, canvas.width * 0.2, cx, canvas.height * 0.5, canvas.width * 0.8);
+      vig.addColorStop(0, 'transparent');
+      vig.addColorStop(1, 'rgba(0,0,0,0.7)');
+      ctx.fillStyle = vig;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Scene number watermark
-    ctx.save();
-    ctx.font = `300 ${Math.min(W, H) * 0.35}px 'Cormorant Garamond', serif`;
-    ctx.fillStyle = `rgba(184,150,78,${0.02 + t * 0.02})`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(scene.number, W * 0.5, H * 0.52);
-    ctx.restore();
-
-    // Vignette
-    const vignette = ctx.createRadialGradient(W*0.5, H*0.5, H*0.1, W*0.5, H*0.5, Math.max(W,H)*0.8);
-    vignette.addColorStop(0, 'transparent');
-    vignette.addColorStop(1, `rgba(4,4,4,${0.7 + t * 0.1})`);
-    ctx.fillStyle = vignette;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  let particleTime = 0;
-  let lastTimestamp = 0;
-
-  function animate(timestamp) {
-    const delta = timestamp - lastTimestamp;
-    lastTimestamp = timestamp;
-    particleTime += delta * 0.001;
-
-    // Smooth interpolation
-    currentProgress += (targetProgress - currentProgress) * 0.08;
-
-    const totalFrames = scenes.length;
-    const rawScene = currentProgress * (totalFrames - 1);
-    const sceneIndex = Math.floor(rawScene);
-    const sceneProgress = rawScene - sceneIndex;
-
-    drawScene(Math.min(sceneIndex, scenes.length - 1), sceneProgress, particleTime);
-
-    // Update scene label
-    const activeScene = scenes[Math.min(sceneIndex, scenes.length - 1)];
-    if (activeScene) {
-      sceneLabel.querySelector('.scene-number').textContent = activeScene.number;
-      sceneLabel.querySelector('.scene-text').textContent = activeScene.text;
-      sceneLabel.classList.add('visible');
+    function drawFrame(index) {
+      const i = Math.max(0, Math.min(TOTAL_FRAMES - 1, index));
+      if (!useFallback && images[i]) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Letterbox / cover fit
+        const img = images[i];
+        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+        const w = img.width * scale;
+        const h = img.height * scale;
+        const x = (canvas.width  - w) / 2;
+        const y = (canvas.height - h) / 2;
+        ctx.drawImage(img, x, y, w, h);
+      } else {
+        drawFallbackFrame(i);
+      }
     }
 
-    // Update dots
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === Math.min(sceneIndex, scenes.length - 1));
-    });
+    function tryLoadImages() {
+      let failed = 0;
+      let attempted = 0;
 
-    animFrame = requestAnimationFrame(animate);
-  }
+      IMAGE_PATHS.forEach((src, i) => {
+        const img = new Image();
+        img.onload = () => {
+          images[i] = img;
+          loadedCount++;
+          attempted++;
+          const pct = Math.round((loadedCount / TOTAL_FRAMES) * 100);
+          loadFill.style.width = pct + '%';
+          loadText.textContent = `Loading ${pct}%`;
 
-  animFrame = requestAnimationFrame(animate);
-
-  // Scroll handler
-  window.addEventListener('scroll', () => {
-    const rect = section.getBoundingClientRect();
-    const sectionH = section.offsetHeight;
-    const viewH = window.innerHeight;
-
-    const scrolled = -rect.top;
-    const maxScroll = sectionH - viewH;
-    targetProgress = Math.max(0, Math.min(1, scrolled / maxScroll));
-
-    // Hide scroll hint after scrolling starts
-    if (scrolled > 50) {
-      scrollHint.style.opacity = '0';
-    } else {
-      scrollHint.style.opacity = '1';
+          if (attempted === TOTAL_FRAMES) onAllAttempted();
+        };
+        img.onerror = () => {
+          failed++;
+          attempted++;
+          if (attempted === TOTAL_FRAMES) {
+            if (failed === TOTAL_FRAMES) {
+              useFallback = true;
+            }
+            onAllAttempted();
+          }
+        };
+        img.src = src;
+      });
     }
 
-    // Show content after slight delay
-    if (scrolled > 10) {
-      content.classList.add('visible');
+    function onAllAttempted() {
+      imagesReady = true;
+      resizeCanvas();
+
+      // Dismiss loading screen
+      loadFill.style.width = '100%';
+      loadText.textContent = 'Ready';
+      setTimeout(() => {
+        loading.classList.add('hidden');
+        setTimeout(() => { loading.style.display = 'none'; }, 700);
+      }, 400);
     }
-  });
 
-  // Initial content reveal
-  setTimeout(() => content.classList.add('visible'), 500);
+    /* ── SCROLL HANDLER ──────────────────────────────────────── */
+    function onScroll() {
+      const top    = seqSection.getBoundingClientRect().top;
+      const height = seqSection.offsetHeight - window.innerHeight;
+      const raw    = -top;
+      const pct    = Math.max(0, Math.min(1, raw / height));
 
-})();
+      // Frame index
+      const frameIdx = Math.round(pct * (TOTAL_FRAMES - 1));
+      if (frameIdx !== currentFrame) {
+        currentFrame = frameIdx;
+        drawFrame(currentFrame);
+        frameCurrent.textContent = String(currentFrame + 1).padStart(2, '0');
+      }
 
-// ── HEADER SCROLL ──
-const header = document.getElementById('main-header');
-window.addEventListener('scroll', () => {
-  header.classList.toggle('scrolled', window.scrollY > 80);
-});
+      // Progress bar
+      scrollFill.style.height = (pct * 100) + '%';
 
-// ── REVEAL ON SCROLL ──
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
+      // Nav state
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
     }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-reveals.forEach(el => observer.observe(el));
-</script>
+    /* ── INTERSECTION OBSERVER (reveal) ─────────────────────── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => revealObs.observe(el));
+
+    /* ── INIT ────────────────────────────────────────────────── */
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', resizeCanvas);
+
+    // Draw fallback immediately while loading
+    resizeCanvas();
+    tryLoadImages();
+
+    // Start fallback loading UX immediately
+    let fakePct = 0;
+    const fakeInterval = setInterval(() => {
+      fakePct = Math.min(fakePct + 8, 85);
+      if (!imagesReady) {
+        loadFill.style.width = fakePct + '%';
+        loadText.textContent = `Preparing your experience`;
+      }
+      if (fakePct >= 85) clearInterval(fakeInterval);
+    }, 120);
+
+  })();
+  </script>
+
 </body>
 </html>
