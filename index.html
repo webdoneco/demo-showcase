@@ -744,9 +744,80 @@
     @media (prefers-reduced-motion: reduce) {
       * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
-  </style>
+  
+  /* ── CUSTOM CURSOR ───────────────────────────── */
+  body { cursor: none; }
+  #cur-dot {
+    position:fixed;width:10px;height:10px;
+    background:#c9a84c;border-radius:50%;
+    pointer-events:none;z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:screen;
+    transition:width .2s,height .2s;
+  }
+  #cur-ring {
+    position:fixed;width:44px;height:44px;
+    border:1px solid rgba(201,168,76,0.4);
+    border-radius:50%;pointer-events:none;z-index:9998;
+    transform:translate(-50%,-50%);
+  }
+  body.cur-hover #cur-dot{width:16px;height:16px;}
+  body.cur-hover #cur-ring{width:64px;height:64px;border-color:rgba(201,168,76,0.8);}
+
+  /* ── CURSOR SPOTLIGHT ON CANVAS ──────────────── */
+  #cursor-spotlight {
+    position:absolute;inset:0;
+    pointer-events:none;z-index:2;
+    background:radial-gradient(circle 280px at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
+    transition:background 0.05s linear;
+  }
+
+  /* ── FILM GRAIN ──────────────────────────────── */
+  #grain {
+    position:fixed;inset:0;z-index:9991;pointer-events:none;
+    opacity:0.04;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:180px 180px;
+    animation:gr 0.4s steps(2) infinite;
+  }
+  @keyframes gr{
+    0%{transform:translate(0,0)}25%{transform:translate(-3%,-2%)}
+    50%{transform:translate(2%,3%)}75%{transform:translate(-2%,2%)}
+    100%{transform:translate(3%,-1%)}
+  }
+
+  /* ── MAGNETIC CTA ────────────────────────────── */
+  .btn-primary, .btn-ghost {
+    transition: transform 0.3s cubic-bezier(.23,1,.32,1), background 0.3s, box-shadow 0.3s !important;
+  }
+  .btn-primary:hover {
+    box-shadow: 6px 6px 0 rgba(201,168,76,0.3) !important;
+  }
+
+  /* ── LETTER REVEAL ───────────────────────────── */
+  .hero-title .char {
+    display:inline-block;
+    opacity:0;
+    transform:translateY(40px);
+    animation:charIn .7s cubic-bezier(.23,1,.32,1) forwards;
+  }
+  @keyframes charIn {
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  @media(max-width:768px){
+    body{cursor:auto}
+    #cur-dot,#cur-ring,#cursor-spotlight{display:none}
+  }
+
+</style>
 </head>
 <body>
+
+<div id="grain"></div>
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
 
   <!-- LOADING SCREEN -->
   <div id="loading">
@@ -772,6 +843,7 @@
   <!-- ═══ SCROLL SEQUENCE SECTION ═══════════════════════════════ -->
   <section id="sequence-section">
     <div id="sequence-sticky">
+      <div id="cursor-spotlight"></div>
       <!-- Fallback background -->
       <div id="seq-fallback"></div>
 
@@ -1441,6 +1513,66 @@
       }
       if (fakePct >= 85) clearInterval(fakeInterval);
     }, 120);
+
+
+  /* ── CUSTOM CURSOR ───────────────────────────── */
+  const curDot  = document.getElementById('cur-dot');
+  const curRing = document.getElementById('cur-ring');
+  const spotlight = document.getElementById('cursor-spotlight');
+  let cx=window.innerWidth/2, cy=window.innerHeight/2;
+  let rx2=cx,ry2=cy;
+
+  document.addEventListener('mousemove',e=>{
+    cx=e.clientX; cy=e.clientY;
+    curDot.style.left=cx+'px';
+    curDot.style.top=cy+'px';
+    // Spotlight follows cursor inside the sticky section
+    const sticky=document.getElementById('sequence-sticky');
+    if(sticky){
+      const r=sticky.getBoundingClientRect();
+      const px=cx-r.left; const py=cy-r.top;
+      spotlight.style.background=
+        `radial-gradient(circle 320px at ${px}px ${py}px, rgba(201,168,76,0.07) 0%, transparent 65%)`;
+    }
+  });
+
+  function animCurRing(){
+    rx2+=(cx-rx2)*0.1;
+    ry2+=(cy-ry2)*0.1;
+    curRing.style.left=rx2+'px';
+    curRing.style.top=ry2+'px';
+    requestAnimationFrame(animCurRing);
+  }
+  animCurRing();
+
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cur-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-hover'));
+  });
+
+  /* ── MAGNETIC BUTTONS ────────────────────────── */
+  document.querySelectorAll('.btn-primary,.btn-ghost').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect();
+      const x=(e.clientX-r.left-r.width/2)*0.3;
+      const y=(e.clientY-r.top-r.height/2)*0.3;
+      btn.style.transform=`translate(${x}px,${y}px)`;
+    });
+    btn.addEventListener('mouseleave',()=>{
+      btn.style.transform='';
+    });
+  });
+
+  /* ── CANVAS PARALLAX ON MOUSE ────────────────── */
+  const seqCanvas = document.getElementById('sequence-canvas');
+  document.addEventListener('mousemove',e=>{
+    const xPct = (e.clientX/window.innerWidth  - 0.5);
+    const yPct = (e.clientY/window.innerHeight - 0.5);
+    if(seqCanvas){
+      seqCanvas.style.transform=`translate(${xPct*8}px,${yPct*6}px) scale(1.02)`;
+    }
+  });
+
 
   })();
   </script>
