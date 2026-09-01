@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ember — London</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@200;300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- GRAIN -->
+  <canvas id="grain"></canvas>
+
+  <!-- CURSOR -->
+  <div id="cd"></div>
+  <div id="cc"></div>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="ld-inner">
+      <div class="ld-logo"><span id="ldSpan">Ember</span></div>
+      <div class="ld-bar"><div id="ldFill"></div></div>
+      <p id="ldPct">0%</p>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="/" class="nav-logo">Ember</a>
+    <ul>
+      <li><a href="#story">Story</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#space">The Space</a></li>
+      <li><a href="#reserve">Reserve</a></li>
+    </ul>
+    <a href="#reserve" class="nav-book mag">Book a Table</a>
+  </nav>
+
+  <!-- ═══════════════════════════════════
+       SCROLL-SCRUBBED VIDEO HERO
+  ═══════════════════════════════════ -->
+  <section id="hero">
+    <!-- The sticky canvas that plays frames on scroll -->
+    <div id="hero-sticky">
+      <canvas id="hero-canvas"></canvas>
+      <div id="hero-vignette"></div>
+
+      <!-- Text layers that animate independently -->
+      <div id="hero-text">
+        <span class="h-tag" id="hTag">London · Est. 2019</span>
+        <h1 id="hTitle">
+          <span class="hr"><em class="hi" id="hi0">Where fire</em></span>
+          <span class="hr"><span class="hi" id="hi1">becomes</span></span>
+          <span class="hr"><em class="hi" id="hi2">flavour.</em></span>
+        </h1>
+        <div id="hSub">
+          <p>A restaurant built on the oldest cooking technique and the most honest philosophy.</p>
+          <a href="#reserve" class="btn-gold mag">Reserve a Table</a>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div id="hScroll">
+        <div class="hsl"></div>
+        <span>Scroll</span>
+      </div>
+    </div>
+
+    <!-- Scroll distance — controls how many "frames" we scrub through -->
+    <div id="hero-spacer"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       TICKER
+  ═══════════════════════════════════ -->
+  <div id="ticker">
+    <div class="tk-track">
+      <span>Live Fire Cooking</span><i>◆</i>
+      <span>British Seasonal</span><i>◆</i>
+      <span>80-Mile Sourcing</span><i>◆</i>
+      <span>Tasting Menu</span><i>◆</i>
+      <span>Private Dining</span><i>◆</i>
+      <span>Natural Wine</span><i>◆</i>
+      <span>Live Fire Cooking</span><i>◆</i>
+      <span>British Seasonal</span><i>◆</i>
+      <span>80-Mile Sourcing</span><i>◆</i>
+      <span>Tasting Menu</span><i>◆</i>
+      <span>Private Dining</span><i>◆</i>
+      <span>Natural Wine</span><i>◆</i>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       STORY
+  ═══════════════════════════════════ -->
+  <section id="story">
+    <div class="story-l">
+      <div class="s-idx">01</div>
+      <div class="s-txt">
+        <span class="tag rv-f">Our Philosophy</span>
+        <h2 class="rv-u">Food that remembers<br>where it <em>came from</em></h2>
+        <p class="rv-f">Every dish at Ember begins with a single question: what does this ingredient want to become? We source exclusively from British farms within 80 miles of London. The seasons write our menu. We follow.</p>
+        <a href="#" class="tlink rv-f"><span>Read our story</span><svg width="44" height="1" viewBox="0 0 44 1"><line x1="0" y1=".5" x2="44" y2=".5" stroke="currentColor"/></svg></a>
+      </div>
+    </div>
+    <div class="story-r rv-img">
+      <div class="img-wrap">
+        <img src="https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop" alt="Chef" class="pimg">
+      </div>
+      <span class="img-cap">Head Chef — Marcus Webb</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       MENU — FULL WIDTH CARDS
+  ═══════════════════════════════════ -->
+  <section id="menu">
+    <div class="menu-hd">
+      <div>
+        <span class="tag rv-f">Seasonal Menu</span>
+        <h2 class="rv-u">Taste the <em>season</em></h2>
+      </div>
+      <a href="#" class="tlink rv-f"><span>Full menu</span><svg width="44" height="1" viewBox="0 0 44 1"><line x1="0" y1=".5" x2="44" y2=".5" stroke="currentColor"/></svg></a>
+    </div>
+
+    <div class="menu-cards">
+
+      <div class="mcard rv-card">
+        <div class="mc-img">
+          <img src="https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop" alt="Celeriac" class="pimg">
+          <div class="mc-overlay"></div>
+        </div>
+        <div class="mc-info">
+          <div class="mc-meta"><span class="tag">Starter</span><span class="mc-price">£18</span></div>
+          <h3><em>Ember-roasted</em> Celeriac</h3>
+          <p>Smoked crème fraîche, hazelnuts, wild chervil, aged sherry vinegar</p>
+        </div>
+      </div>
+
+      <div class="mcard rv-card">
+        <div class="mc-img">
+          <img src="https://images.pexels.com/photos/1199957/pexels-photo-1199957.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop" alt="Rib" class="pimg">
+          <div class="mc-overlay"></div>
+        </div>
+        <div class="mc-info">
+          <div class="mc-meta"><span class="tag">Signature</span><span class="mc-price">£52</span></div>
+          <h3>Dry-aged <em>Longhorn</em> Rib</h3>
+          <p>45-day aged, bone marrow butter, heritage watercress, smoked salt</p>
+        </div>
+      </div>
+
+      <div class="mcard rv-card">
+        <div class="mc-img">
+          <img src="https://images.pexels.com/photos/3763847/pexels-photo-3763847.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop" alt="Turbot" class="pimg">
+          <div class="mc-overlay"></div>
+        </div>
+        <div class="mc-info">
+          <div class="mc-meta"><span class="tag">Main</span><span class="mc-price">£44</span></div>
+          <h3>Cornish <em>Turbot</em></h3>
+          <p>Burnt leek ash, sea herbs, saffron butter, lemon verbena</p>
+        </div>
+      </div>
+
+      <div class="mcard rv-card">
+        <div class="mc-img">
+          <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop" alt="Chocolate" class="pimg">
+          <div class="mc-overlay"></div>
+        </div>
+        <div class="mc-info">
+          <div class="mc-meta"><span class="tag">Dessert</span><span class="mc-price">£14</span></div>
+          <h3>Smoked <em>Dark Chocolate</em></h3>
+          <p>72% single origin, sea salt caramel, malt ice cream</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       FULL BLEED
+  ═══════════════════════════════════ -->
+  <div id="fullbleed">
+    <div class="fb-wrap">
+      <img src="https://images.pexels.com/photos/941861/pexels-photo-941861.jpeg?auto=compress&cs=tinysrgb&w=1920&h=900&fit=crop" alt="Dining room" class="pimg fb-pimg">
+      <div class="fb-ov"></div>
+    </div>
+    <div class="fb-text">
+      <span class="tag">The Dining Room</span>
+      <h2 class="rv-u">An atmosphere<br>of its <em>own</em></h2>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SPACE
+  ═══════════════════════════════════ -->
+  <section id="space">
+    <div class="sp-grid">
+      <div class="sp-img rv-img">
+        <div class="img-wrap">
+          <img src="https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop" alt="Interior" class="pimg">
+        </div>
+      </div>
+      <div class="sp-right">
+        <span class="tag rv-f">The Space</span>
+        <h2 class="rv-u">Designed for the<br><em>unhurried</em> meal</h2>
+        <p class="rv-f">50 covers across two rooms. No music that fights conversation. Lighting that shifts with the evening. A room that knows its purpose.</p>
+        <div class="stats">
+          <div class="stat rv-s"><b data-count="50">0</b><span>Covers</span></div>
+          <div class="stat rv-s"><b data-count="14">0</b><span>Seasonal dishes</span></div>
+          <div class="stat rv-s"><b data-count="6">0</b><span>Years open</span></div>
+          <div class="stat rv-s"><b data-count="80">0</b><span>Mile sourcing</span></div>
+        </div>
+        <div class="sp-img2 rv-img">
+          <div class="img-wrap">
+            <img src="https://images.pexels.com/photos/1484516/pexels-photo-1484516.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop" alt="Table" class="pimg">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       QUOTE
+  ═══════════════════════════════════ -->
+  <section id="quote">
+    <div class="qt-inner">
+      <div class="qt-mark">"</div>
+      <blockquote class="rv-u">The best meal I have eaten in London in five years. Every course felt inevitable — like the ingredient had been waiting to become that dish.</blockquote>
+      <cite class="rv-f">The Guardian &nbsp;·&nbsp; Restaurant of the Year Finalist</cite>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       RESERVE
+  ═══════════════════════════════════ -->
+  <section id="reserve">
+    <div class="res-img">
+      <img src="https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop" alt="Reserve" class="pimg res-pimg">
+      <div class="res-ov"></div>
+    </div>
+    <div class="res-content">
+      <span class="tag rv-f">Reservations</span>
+      <h2 class="rv-u">Join us for<br>an <em>evening</em></h2>
+      <p class="rv-f">Tables fill quickly Thursday through Saturday. We recommend reserving two weeks in advance.</p>
+      <div class="res-btns rv-f">
+        <a href="tel:+442071234567" class="btn-gold mag">+44 207 123 4567</a>
+        <a href="#" class="btn-ghost mag">Book Online</a>
+      </div>
+      <div class="res-hours rv-f">
+        <div><span>Tue — Thu</span><b>6:00 — 10:30pm</b></div>
+        <div class="rhdiv"></div>
+        <div><span>Fri — Sat</span><b>12:00 — 11:00pm</b></div>
+        <div class="rhdiv"></div>
+        <div><span>Sunday</span><b>12:00 — 9:00pm</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════ -->
+  <footer>
+    <div class="ft-top">
+      <div class="ft-brand">
+        <p class="ft-logo">Ember</p>
+        <p>Live fire cooking.<br>London, SE15.</p>
+      </div>
+      <div class="ft-cols">
+        <div>
+          <p class="ft-cl-title">Visit</p>
+          <ul>
+            <li>14 Blenheim Grove</li>
+            <li>London, SE15 4QL</li>
+            <li><a href="tel:+442071234567">+44 207 123 4567</a></li>
+            <li><a href="mailto:hello@ember.london">hello@ember.london</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="ft-cl-title">Explore</p>
+          <ul>
+            <li><a href="#">Tasting Menu</a></li>
+            <li><a href="#">Wine List</a></li>
+            <li><a href="#">Private Dining</a></li>
+            <li><a href="#">Gift Cards</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="ft-cl-title">Hours</p>
+          <ul>
+            <li>Tue–Thu: 6–10:30pm</li>
+            <li>Fri–Sat: 12–11pm</li>
+            <li>Sun: 12–9pm</li>
+            <li>Mon: Closed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <p>© 2026 Ember London</p>
+      <p class="ft-credit">Website by <a href="https://webdoneco.com" target="_blank">WebDone Co.</a></p>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
